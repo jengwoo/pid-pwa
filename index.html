@@ -711,5 +711,25 @@ state.member = form.member.value.trim();
     navigator.serviceWorker.register("./sw.js");
   }
 </script>
+  <script>
+  const KEY = "pidpwa_profile_v1";
+  const saved = JSON.parse(localStorage.getItem(KEY) || "{}");
+
+  const setText = (id, v) => {
+    const el = document.getElementById(id);
+    if (el && v) el.textContent = v;
+  };
+
+  const setImg = (id, v) => {
+    const el = document.getElementById(id);
+    if (el && v) el.src = v;
+  };
+
+  setText("name", saved.name);
+  setText("birth", saved.birth);
+  setText("addr", saved.addr);
+  setImg("photo", saved.photo);
+</script>
 </body>
+
 </html>
