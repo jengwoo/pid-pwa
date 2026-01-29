@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>관리자 설정</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; margin:24px; line-height:1.4}
+    label{display:block; margin:12px 0 6px}
+    input{width:100%; max-width:420px; padding:10px; font-size:16px}
+    button{margin-top:16px; padding:10px 14px; font-size:16px; cursor:pointer}
+    .hint{color:#666; margin-top:10px}
+  </style>
+</head>
+<body>
+  <h2>관리자 설정(임시)</h2>
+
+  <label>이름</label>
+  <input id="name" placeholder="예: 홍길동" />
+
+  <label>생년월일(표시용)</label>
+  <input id="birth" placeholder="예: 06.01.21" />
+
+  <label>주소(표시용)</label>
+  <input id="addr" placeholder="예: 서울 동대문구" />
+
+  <label>사진 URL(선택)</label>
+  <input id="photo" placeholder="https://..." />
+
+  <button id="save">저장</button>
+  <div class="hint">저장하면 메인 화면이 이 값으로 표시되게 연결할 거임.</div>
+
+  <script>
+    const KEY = "pidpwa_profile_v1";
+    const saved = JSON.parse(localStorage.getItem(KEY) || "{}");
+    name.value = saved.name || "";
+    birth.value = saved.birth || "";
+    addr.value = saved.addr || "";
+    photo.value = saved.photo || "";
+
+    save.onclick = () => {
+      const data = {
+        name: name.value.trim(),
+        birth: birth.value.trim(),
+        addr: addr.value.trim(),
+        photo: photo.value.trim(),
+      };
+      localStorage.setItem(KEY, JSON.stringify(data));
+      alert("저장됨. 이제 메인 화면 코드에 이 값 불러오게 연결하면 됨.");
+    };
+  </script>
+</body>
+</html>
