@@ -31,6 +31,11 @@
   <div class="hint">저장하면 메인 화면이 이 값으로 표시되게 연결할 거임.</div>
 
   <script>
+    const name  = document.getElementById("name");
+const birth = document.getElementById("birth");
+const addr  = document.getElementById("addr");
+const photo = document.getElementById("photo");
+const save  = document.getElementById("save");
     const KEY = "pidpwa_profile_v1";
     const saved = JSON.parse(localStorage.getItem(KEY) || "{}");
     name.value = saved.name || "";
