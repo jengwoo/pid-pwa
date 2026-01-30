@@ -1,8 +1,16 @@
 <script>
+  // ✅ 강제 초기화(리셋)
+  if (new URLSearchParams(location.search).get("reset") === "1") {
+    localStorage.clear();
+    sessionStorage.clear();
+  }
+
+  // ✅ 인증 체크
   const p = new URLSearchParams(location.search);
   if (p.get("auth") !== "1") {
-    location.replace("https://pid-auth-worker.hyun090701.workers.dev");
+    location.replace("https://pid-auth-worker.hyuno90701.workers.dev");
   }
+</script>
 </script>
 <!doctype html>
 <html lang="ko">
@@ -456,6 +464,7 @@ window.addEventListener("pageshow", () => {
   </script>
 </body>
 </html>
+
 
 
 
