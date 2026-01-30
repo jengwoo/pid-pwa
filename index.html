@@ -773,12 +773,64 @@ state.member = form.member.value.trim();
       showScreen("qr");
     });
   }
-</script>
-</script>
-</body>
+<script>
+/* ===== 화면 요소 ===== */
+const screenQR = document.getElementById("screenQR");
+const screenDetail = document.getElementById("screenDetail");
+const toDetailBtn = document.getElementById("toDetailBtn");
+const toQRBtn = document.getElementById("toQRBtn");
 
-</html>
+/* ===== 화면 전환 ===== */
+function showScreen(which) {
+  if (which === "qr") {
+    screenQR.style.display = "block";
+    screenDetail.style.display = "none";
+  } else if (which === "detail") {
+    screenQR.style.display = "none";
+    screenDetail.style.display = "block";
+  }
+}
 
+if (toDetailBtn) {
+  toDetailBtn.addEventListener("click", () => {
+    showScreen("detail");
+  });
+}
+
+if (toQRBtn) {
+  toQRBtn.addEventListener("click", () => {
+    showScreen("qr");
+  });
+}
+
+/* ===== 관리자 설정 불러오기 ===== */
+const KEY = "pidpwa_profile_v1";
+let saved = {};
+
+try {
+  saved = JSON.parse(localStorage.getItem(KEY) || "{}");
+} catch (e) {
+  saved = {};
+}
+
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value || "";
+}
+
+function setImg(id, value) {
+  const el = document.getElementById(id);
+  if (el && value) el.src = value;
+}
+
+setText("name", saved.name);
+setText("birth", saved.birth);
+setText("addr", saved.addr);
+setImg("photo", saved.photo);
+
+/* ===== 최초 화면 ===== */
+showScreen("qr");
+</script>
 
 
 
