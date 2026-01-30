@@ -84,7 +84,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // 6) 서비스워커(있으면)
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./sw.js").catch(() => {});
+
   }
 });
+
 
