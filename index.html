@@ -135,6 +135,7 @@
 
     <!-- 상세정보 화면 -->
     <div id="screenDetail" style="display:none;">
+      <button id="toQRBtn">QR정보 표시</button>
       <h2>상세정보</h2>
 
       <label class="switch">
@@ -742,10 +743,42 @@ state.member = form.member.value.trim();
   setText("birth", saved.birth);
   setText("addr", saved.addr);
   setImg("photo", saved.photo);
+    <script>
+  const screenQR = document.getElementById("screenQR");
+  const screenDetail = document.getElementById("screenDetail");
+
+  const toDetailBtn = document.getElementById("toDetailBtn");
+  const toQRBtn = document.getElementById("toQRBtn");
+
+  function showScreen(which) {
+    if (which === "qr") {
+      screenQR.style.display = "block";
+      screenDetail.style.display = "none";
+    } else if (which === "detail") {
+      screenQR.style.display = "none";
+      screenDetail.style.display = "block";
+    }
+  }
+
+  // 1번 → 2번
+  if (toDetailBtn) {
+    toDetailBtn.addEventListener("click", () => {
+      showScreen("detail");
+    });
+  }
+
+  // 2·3번 → 1번
+  if (toQRBtn) {
+    toQRBtn.addEventListener("click", () => {
+      showScreen("qr");
+    });
+  }
+</script>
 </script>
 </body>
 
 </html>
+
 
 
 
