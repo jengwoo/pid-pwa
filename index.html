@@ -431,6 +431,12 @@
       if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flipToggle(); }
     });
     setToggle(false);
+    // 앱 시작 / 복원 시 항상 첫 화면으로
+window.addEventListener("pageshow", () => {
+  setToggle(false);
+  show("view1");
+});
+
 
     // ===== 관리자 숨김/표시: URL에 ?admin=1 이면 표시 =====
     const params = new URLSearchParams(location.search);
@@ -444,6 +450,7 @@
   </script>
 </body>
 </html>
+
 
 
 
