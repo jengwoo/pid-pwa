@@ -137,11 +137,18 @@
       </label>
       <span style="font-size:14px;">상세정보 표시</span>
 
-      <div class="info" id="infoBox">
-        <p>이름: 홍길동</p>
-        <p>주민번호: 000000-*******</p>
-        <p>발급일: 2025.01.25</p>
-      </div>
+     <div class="info" id="infoBox">
+    
+
+  <!-- 사진 -->
+  <img id="photo"
+       src=""
+       style="width:90px; height:120px; object-fit:cover; border-radius:8px; margin-bottom:8px;" />
+
+  <p>이름: <span id="name"></span></p>
+  <p>생년월일: <span id="birth"></span></p>
+  <p>주소: <span id="addr"></span></p>
+</div>
 
       <button id="toQRBtn">QR정보 표시</button>
     </div>
@@ -733,3 +740,4 @@ state.member = form.member.value.trim();
 </body>
 
 </html>
+
