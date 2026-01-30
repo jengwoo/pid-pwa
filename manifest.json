@@ -1,6 +1,6 @@
 {
   "name": "피드앱",
-  "short_name": "피드앱",
+  "short_name": "정부24",
   "start_url": "https://pid-auth-worker.hyun090701.workers.dev",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -18,3 +18,4 @@
     }
   ]
 }
+
