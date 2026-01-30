@@ -1,169 +1,393 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PID App</title>
-
-<link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#f2f2f2">
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>피드앱</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f2f2f2;
-      display: flex;
-      justify-content: center;
-      padding-top: 40px;
+    :root{
+      --bg:#0b0f14;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#6b7280;
+      --line: rgba(15, 23, 42, 0.12);
+      --primary:#111827;
+      --btn:#111827;
+      --btnText:#ffffff;
+      --chip:#f3f4f6;
+      --shadow: 0 18px 55px rgba(0,0,0,.35);
+      --radius: 18px;
     }
 
-    .card {
-      width: 320px;
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; margin:0; font-family: ui-sans-serif, system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif; background:var(--bg); }
+    button{ font: inherit; }
+    .app{
+      min-height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 22px 14px;
+    }
+    .phone{
+      width: min(420px, 100%);
+      border-radius: 28px;
+      background: rgba(255,255,255,0.06);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.10);
     }
 
-    h2 {
-      margin: 0 0 8px 0;
+    /* 상단 바 */
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 6px 6px 12px;
+      color: rgba(255,255,255,0.92);
+    }
+    .brand{
+      display:flex; gap:10px; align-items:center;
+      font-weight:700; letter-spacing:0.2px;
+    }
+    .dot{
+      width:10px; height:10px; border-radius:50%;
+      background: rgba(255,255,255,0.85);
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.15);
+    }
+    .timer{
+      font-variant-numeric: tabular-nums;
+      font-weight:700;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.14);
     }
 
-    .timer {
-      font-size: 14px;
-      margin-bottom: 12px;
+    /* 카드 */
+    .card{
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 16px;
+      color: var(--text);
+      border: 1px solid rgba(15, 23, 42, 0.08);
     }
-
-    .qr-box {
-      height: 160px;
+    .row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+    }
+    .title{
+      font-size: 16px;
+      font-weight: 800;
+      margin: 2px 0 0;
+    }
+    .sub{
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .avatar{
+      width: 54px;
+      height: 70px;
       border-radius: 12px;
-      background: #e9e9e9;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      color: #555;
+      background: linear-gradient(135deg, #e5e7eb, #f9fafb);
+      border: 1px solid rgba(15, 23, 42, 0.10);
+      display:flex; align-items:center; justify-content:center;
+      color: rgba(15,23,42,.55);
+      font-weight:800;
     }
 
-    button {
-      width: 100%;
-      margin-top: 16px;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      background: #111;
-      color: white;
-      font-size: 15px;
-      cursor: pointer;
+    .divider{ height:1px; background: var(--line); margin: 14px 0; }
+
+    .kv{
+      display:grid;
+      grid-template-columns: 92px 1fr;
+      gap: 8px 10px;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .k{ color: var(--muted); font-weight: 700; }
+    .v{ color: var(--text); font-weight: 800; letter-spacing: 0.1px; }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: var(--chip);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text);
+      user-select:none;
     }
 
-    .info p {
-      margin: 8px 0;
-      font-size: 14px;
-    }
-
-    /* 레버 스위치 */
-    .switch {
+    /* 토글(흰색 레버) */
+    .toggle{
+      width: 56px;
+      height: 30px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      border: 1px solid rgba(15,23,42,0.12);
       position: relative;
-      display: inline-block;
-      width: 46px;
-      height: 26px;
-      margin-right: 8px;
-      vertical-align: middle;
-    }
-
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .slider {
-      position: absolute;
+      flex: 0 0 auto;
       cursor: pointer;
-      inset: 0;
-      background-color: #ccc;
-      transition: .3s;
-      border-radius: 26px;
+      padding: 2px;
+    }
+    .toggle .knob{
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: #ffffff;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+      transform: translateX(0);
+      transition: transform .18s ease;
+    }
+    .toggle[data-on="1"]{
+      background: #111827;
+    }
+    .toggle[data-on="1"] .knob{
+      transform: translateX(26px);
     }
 
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 22px;
-      width: 22px;
-      left: 2px;
-      bottom: 2px;
-      background-color: white;
-      transition: .3s;
-      border-radius: 50%;
+    .actions{
+      display:grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .btn{
+      border: none;
+      background: var(--btn);
+      color: var(--btnText);
+      border-radius: 14px;
+
+padding: 13px 14px;
+      font-weight: 900;
+      letter-spacing: 0.2px;
+      cursor: pointer;
+    }
+    .btn.secondary{
+      background: #f3f4f6;
+      color: #111827;
+      border: 1px solid rgba(15,23,42,0.10);
     }
 
-    .switch input:checked + .slider {
-      background-color: #111;
+    /* 화면 전환 */
+    .view{ display:none; }
+    .view.active{ display:block; }
+
+    /* QR 화면(첫 화면으로 복귀 버튼) */
+    .qrBox{
+      margin-top: 12px;
+      border-radius: 16px;
+      border: 1px dashed rgba(15,23,42,0.25);
+      background: #fafafa;
+      padding: 16px;
+      color: #111827;
+      text-align:center;
+      font-weight: 900;
     }
 
-    .switch input:checked + .slider:before {
-      transform: translateX(20px);
+    /* iframe (pid-app.pages.dev) */
+    .frameWrap{
+      margin-top: 12px;
+      border-radius: 16px;
+      overflow:hidden;
+      border: 1px solid rgba(15,23,42,0.10);
+      background:#fff;
+      height: 420px;
+    }
+    iframe{
+      width:100%;
+      height:100%;
+      border:0;
+      display:block;
+    }
+    .note{
+      margin-top: 10px;
+      color: rgba(255,255,255,0.70);
+      font-size: 12px;
+      line-height: 1.4;
+      padding: 0 6px;
     }
   </style>
 </head>
-
 <body>
+  <div class="app">
+    <div class="phone">
+      <div class="topbar">
+        <div class="brand"><span class="dot"></span><span>피드앱</span></div>
+        <div class="timer">남은시간 <span id="t">30</span>s</div>
+      </div>
 
-  <div class="card">
-    <img id="photoImg" style="width:100%; border-radius:12px; margin-bottom:12px; display:none;" />
+      <!-- ====== VIEW 1: 기본(첫 화면) ====== -->
+      <section id="view1" class="view active">
+        <div class="card">
+          <div class="row">
+            <div>
+              <div class="title" id="name">홍길동</div>
+              <div class="sub">모바일 신분증</div>
+            </div>
+            <div class="avatar" id="avatar">사진</div>
+          </div>
 
-    <!-- QR 화면 -->
-    <div id="screenQR">
-      <h2>모바일 신분증</h2>
+          <div class="divider"></div>
 
-      <p class="timer">
-        남은 시간: <span id="timer">30</span>초
-      </p>
+          <div class="kv">
+            <div class="k">생년월일</div><div class="v" id="dob">2009.07.01</div>
+            <div class="k">발급기관</div><div class="v" id="issuer">Incheon</div>
+            <div class="k">식별번호</div><div class="v" id="idno">ABCD-1234</div>
+          </div>
 
-    <div class="qr-box">
-  <img
-    src="https://crunchify.com/wp-content/uploads/2020/12/Crunchify.com-QRCode-gray-color.png"
-    style="width:160px; height:160px;"
-  >
-</div>
+          <div class="actions">
+            <button class="btn" id="goDetail">상세정보 표시</button>
+          </div>
 
-      <button id="toDetailBtn">상세정보 표시</button>
+          <div class="frameWrap" title="pid-app.pages.dev 표시(선택)">
+            <!-- 필요 없으면 이 iframe 블록 통째로 지워도 됩니다 -->
+            <iframe id="pidFrame" src="https://pid-app.pages.dev"></iframe>
+          </div>
+        </div>
+
+        <div class="note">
+          ※ 이 화면은 “기본 화면”입니다. 타이머는 화면 전환과 무관하게 계속 돌아갑니다.
+        </div>
+      </section>
+
+      <!-- ====== VIEW 2: 상세정보 버튼 있는 화면 ====== -->
+      <section id="view2" class="view">
+        <div class="card">
+          <div class="row">
+            <div>
+              <div class="title">상세 정보</div>
+              <div class="sub">레버(토글)로 상세 노출</div>
+            </div>
+
+            <!-- 흰색 레버 -->
+            <div class="toggle" id="toggle" role="switch" aria-checked="false" tabindex="0" data-on="0">
+              <div class="knob"></div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="kv">
+            <div class="k">표시상태</div><div class="v" id="detailState">숨김</div>
+            <div class="k">안내</div><div class="v">레버 ON → 3번째 화면</div>
+          </div>
+
+          <div class="actions">
+            <button class="btn" id="goQR2">QR정보 표시</button>
+            <button class="btn secondary" id="back1a">첫 화면으로</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====== VIEW 3: 상세정보 노출 화면 ====== -->
+      <section id="view3" class="view">
+        <div class="card">
+          <div class="title">상세 정보(노출)</div>
+          <div class="sub">레버 ON 상태 화면</div>
+
+          <div class="divider"></div>
+
+          <div class="kv">
+            <div class="k">주소</div><div class="v">인천광역시 …</div>
+            <div class="k">발급일</div><div class="v">2026.01.30</div>
+            <div class="k">비고</div><div class="v">예시 데이터</div>
+          </div>
+
+          <div class="actions">
+            <button class="btn" id="goQR3">QR정보 표시</button>
+            <button class="btn secondary" id="back2">상세 화면으로</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====== QR(복귀 화면: 요구대로 1번으로) ====== -->
+
+<section id="viewQR" class="view">
+        <div class="card">
+          <div class="title">QR 정보</div>
+          <div class="sub">버튼 누르면 1번(기본)으로 복귀</div>
+
+          <div class="qrBox">[ QR 자리 ]</div>
+
+          <div class="actions">
+            <button class="btn" id="backTo1">첫 화면으로 복귀</button>
+          </div>
+        </div>
+      </section>
+
     </div>
-
-    <!-- 상세정보 화면 -->
-    <div id="screenDetail" style="display:none;">
-  
-      <h2>상세정보</h2>
-
-      <label class="switch">
-        <input type="checkbox" id="infoToggle" checked>
-        <span class="slider"></span>
-      </label>
-      <span style="font-size:14px;">상세정보 표시</span>
-
-     <div class="info" id="infoBox">
-    
-
-  <!-- 사진 -->
-  <img id="photo"
-       src=""
-       style="width:90px; height:120px; object-fit:cover; border-radius:8px; margin-bottom:8px;" />
-
-  <p>이름: <span id="name"></span></p>
-  <p>생년월일: <span id="birth"></span></p>
-  <p>주소: <span id="addr"></span></p>
-</div>
-
-      <button id="toQRBtn">QR정보 표시</button>
-    </div>
-
   </div>
 
+  <script>
+    // ===== 타이머: 앱 시작과 동시에 30 -> 0 -> 30 반복 (화면 전환과 무관) =====
+    (function timerLoop(){
+      let t = 30;
+      let dir = -1; // -1: 감소, +1: 증가
+      const el = document.getElementById('t');
 
-<script src="./app.js"></script>
+      // 처음 표시
+      el.textContent = String(t);
+
+      setInterval(() => {
+        t += dir;
+
+        if (t <= 0) { t = 0; dir = +1; }
+        else if (t >= 30) { t = 30; dir = -1; }
+
+        el.textContent = String(t);
+      }, 1000);
+    })();
+
+    // ===== 화면 전환 =====
+    const views = ["view1","view2","view3","viewQR"].map(id => document.getElementById(id));
+
+    function show(id){
+      for (const v of views) v.classList.remove("active");
+      document.getElementById(id).classList.add("active");
+    }
+
+    // ===== 버튼 동작(요구사항 그대로) =====
+    document.getElementById("goDetail").addEventListener("click", () => show("view2"));
+    document.getElementById("back1a").addEventListener("click", () => show("view1"));
+    document.getElementById("back2").addEventListener("click", () => show("view2"));
+
+    document.getElementById("goQR2").addEventListener("click", () => show("viewQR"));
+    document.getElementById("goQR3").addEventListener("click", () => show("viewQR"));
+    document.getElementById("backTo1").addEventListener("click", () => show("view1"));
+
+    // ===== 토글(흰색 레버): 2번 화면에서 ON 하면 3번 화면으로 =====
+    const toggle = document.getElementById("toggle");
+    const detailState = document.getElementById("detailState");
+
+    function setToggle(on){
+      toggle.dataset.on = on ? "1" : "0";
+      toggle.setAttribute("aria-checked", on ? "true" : "false");
+      detailState.textContent = on ? "노출" : "숨김";
+
+      if (on) show("view3");
+      else show("view2");
+    }
+
+    function flipToggle(){
+      const on = toggle.dataset.on === "1";
+      setToggle(!on);
+    }
+
+    toggle.addEventListener("click", flipToggle);
+    toggle.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flipToggle(); }
+    });
+
+    // 초기 상태: OFF
+    setToggle(false);
+  </script>
 </body>
 </html>
-
