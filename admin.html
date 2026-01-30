@@ -54,5 +54,24 @@ const save  = document.getElementById("save");
       alert("저장됨. 이제 메인 화면 코드에 이 값 불러오게 연결하면 됨.");
     };
   </script>
+  <script>
+  // 저장 키 (index.html 과 반드시 동일해야 함)
+  const KEY = "pidpwa_profile_v1";
+
+  // 저장 버튼
+  const saveBtn = document.getElementById("save");
+
+  saveBtn.addEventListener("click", () => {
+    const data = {
+      name: document.getElementById("name").value.trim(),
+      birth: document.getElementById("birth").value.trim(),
+      addr: document.getElementById("addr").value.trim(),
+      photo: document.getElementById("photo").value.trim(),
+    };
+
+    localStorage.setItem(KEY, JSON.stringify(data));
+    alert("저장됨! 이제 PID App 메인 화면에서 확인하세요.");
+  });
+</script>
 </body>
 </html>
